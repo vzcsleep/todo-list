@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/css/styles.css" rel="stylesheet" type="text/css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique:wght@400;500;900&display=swap" rel="stylesheet"> 
+    <title>todo list - project</title>
+</head> 
+<body> 
+    <div class="box">
+        <h1><%=listTitle%></h1>
+        <div class="glance">
+            <h2><%=date%> ·<img src="<%=weatherImg%>" alt="Weather Icon"><%=temp%>&#8451;</h1>
+        </div>
+        <h3>To-do List</h2>
+        <div class="itemsList">
+            <% itemList.forEach(function(item) { %>
+                <form action="/delete" method="post">
+                    <div class="item">
+                        <input type="checkbox" name="checkbox" value="<%=item._id%>" onchange="this.form.submit()">
+                        <p>- <%= item.text %></p>
+                    </div>
+                    <input type="hidden" name="listName" value="<%=listTitle%>">
+                </form>
+    
+            <% }); %>
+        </div>
+        <form action="/" method="post">
+            <input type="text" name="newItem" autocomplete="off" placeholder="New item">
+            <button type="submit" name="list" value="<%= listTitle %>">Add</button>
+        </form>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="/js/index.js"></script>
+</body>
+</html>

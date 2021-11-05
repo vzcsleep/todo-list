@@ -1,0 +1,86 @@
+/* 
+colors:
+#FEF5ED (white)
+#D3E4CD (accent)
+#99A799 (base)
+
+#334257 (dark blue)
+#476072 (dark grey)
+#548CA8 (light blue)
+#EEEEEE (white)
+*/
+body {
+    background-color: #334257;
+    text-align: center;
+    font-family: 'Zen Kaku Gothic Antique', sans-serif;
+}
+
+h1, h2 {
+    margin-top: 0;
+    color: #EEEEEE;
+    line-height: 50px;
+}
+
+h3 {
+    margin-top: 0;
+    color: #EEEEEE;
+}
+
+p {
+    color: #EEEEEE;
+}
+
+.box {
+    background: #476072;
+    max-width: 400px;
+    border-radius: 20px;
+    margin: 50px auto;
+    padding: 20px;
+}
+
+button {
+    border: none;
+    background-color: #EEEEEE;
+    padding: 1px 10px;
+}
+
+input {
+    border: none;
+    border-bottom: 2px solid #548CA8;
+    background: #476072;
+    outline: none;
+    color: #EEEEEE;
+    font-size: 16px;
+}
+
+input:checked+p {
+    text-decoration: line-through;
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    background-color: #548CA8;
+    border-radius: 20px;
+    margin-bottom: 5px;
+}
+
+.firstItem {
+    display: flex;
+    align-items: center;
+    background-color: #548CA8;
+    border-radius: 15px 15px 0 0;
+}
+
+.item:last-child {
+    display: flex;
+    align-items: center;
+    background-color: #548CA8;
+    border-radius: 0 0 15px 15px;
+}
+
+img {
+    vertical-align: bottom;
+    width: 50px;
+    height: 50px;
+}

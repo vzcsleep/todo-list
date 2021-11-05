@@ -50,28 +50,33 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static('public')); 
 
-exports.numItems = function() {
-    Item.find(function(err, items) {
-        return items.length;
-    });
-};
-
 app.get('/', (request, response) => {
-    // get weather
+    // gets title of list
+    const listName = 'Today';
 
+    // get weather
     weather.getAllWeather(function(err, JSONObj){
 		// temp, weather icon, 
         const temperature = Math.floor(JSONObj.main.temp);
         const weatherIcon = JSONObj.weather[0].icon;
         const weatherIconURL = "http://openweathermap.org/img/wn/" + weatherIcon + "@2x.png";
         if(!err) {
-            Item.find(function(err, items) {
-                if(err) {
-                    console.log(err);
+            List.findOne({name: listName}, function(err, result) {
+                if(!result) {
+                    const list = new List({
+                        name: listName,
+                        items: []
+                    });
+
+                    list.save();
+
+                    response.redirect('/');
                 } else {
-                    response.render('index', {listTitle: 'Today', itemList: items, date: day, temp: temperature, weatherImg: weatherIconURL});
+                    response.render('index', {listTitle: 'Today', itemList: result.items, date: day, temp: temperature, weatherImg: weatherIconURL});
                 }
             });
+        } else {
+            console.log(err);
         }
 	});
 }); 
@@ -79,24 +84,30 @@ app.get('/', (request, response) => {
 app.get('/:customListName', function(request, response) {
     const listName = _.capitalize(request.params.customListName);
 
-    List.findOne({name: listName}, function(err, result) {
-        // if db doesnt exist with name
-        if(!result) {
-            // create new list
-            const list = new List({
-                name: listName,
-                items: []
-            });
+    weather.getAllWeather(function(err, JSONObj){
+		// temp, weather icon, 
+        const temperature = Math.floor(JSONObj.main.temp);
+        const weatherIcon = JSONObj.weather[0].icon;
+        const weatherIconURL = "http://openweathermap.org/img/wn/" + weatherIcon + "@2x.png";
+        List.findOne({name: listName}, function(err, result) {
+            // if db doesnt exist with name
+            if(!result) {
+                // create new list
+                const list = new List({
+                    name: listName,
+                    items: []
+                });
 
-            // save the new list to database
-            list.save();
+                // save the new list to database
+                list.save();
 
-            response.redirect('/' + listName);
-        } else {
-            // show existing list
-            response.render('index', {listTitle: listName, itemList: result.items, date: day});
-        }
-    });
+                response.redirect('/' + listName);
+            } else {
+                // show existing list
+                response.render('index', {listTitle: listName, itemList: result.items, date: day, temp: temperature, weatherImg: weatherIconURL});
+            }
+        });
+	});
 });
 
 app.post('/', (request, response) => {
@@ -110,14 +121,14 @@ app.post('/', (request, response) => {
 
     // Searches if the name of the database is at the home, then saves it
     if(listName === 'Today') {
-        // save item to database
-        item.save();
-    
-        response.redirect('/');
+        List.findOne({name: listName}, function(err, result) {
+            result.items.push(item);
+            result.save();
+            response.redirect('/');
+        });      
     } else {
         // Searches for the custom database, then saves it.
         List.findOne({name: listName}, function(err, result) {
-            console.log(result);
             result.items.push(item);
             result.save();
             response.redirect('/' + listName);
@@ -137,14 +148,13 @@ app.post('/delete', (request, response) => {
     // Searches if list is set to home
     if(listName === 'Today') {
         // Deletes item with id
-        Item.findByIdAndDelete(itemID, function(err) {
+        List.findOneAndUpdate({name: listName}, {$pull: {items: {_id: itemID}}}, function(err, result) {
             if(err) {
                 console.log(err);
             } else {
-                console.log('Successfully deleted item with id: ' + itemID);
+                response.redirect('/');
             }
         });
-        response.redirect('/');
     } else {
         List.findOneAndUpdate({name: listName}, {$pull: {items: {_id: itemID}}}, function(err, result) {
             if(err) {

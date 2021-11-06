@@ -26,18 +26,13 @@ try {
 
 // entry format
 const itemSchema = mongoose.Schema({
-    text: {
-        type: String
-    }
+    text: String,
+    dateAdded: String
 });
 
 const listSchema = mongoose.Schema({
-    name: {
-        type: String
-    },
-    items: {
-        type: [itemSchema]
-    }
+    name: String,
+    items: [itemSchema]
 });
  
 // db model
@@ -72,7 +67,7 @@ app.get('/', (request, response) => {
 
                     response.redirect('/');
                 } else {
-                    response.render('index', {listTitle: 'Today', itemList: result.items, date: day, temp: temperature, weatherImg: weatherIconURL});
+                    response.render('index', {listTitle: 'Today', itemList: result.items, dateAdded: result.items.dateAdded, date: day, temp: temperature, weatherImg: weatherIconURL});
                 }
             });
         } else {
@@ -104,7 +99,7 @@ app.get('/:customListName', function(request, response) {
                 response.redirect('/' + listName);
             } else {
                 // show existing list
-                response.render('index', {listTitle: listName, itemList: result.items, date: day, temp: temperature, weatherImg: weatherIconURL});
+                response.render('index', {listTitle: listName, itemList: result.items, temp: temperature, weatherImg: weatherIconURL});
             }
         });
 	});
@@ -116,7 +111,8 @@ app.post('/', (request, response) => {
 
     // New item object
     const item = new Item({
-        text: request.body.newItem
+        text: request.body.newItem,
+        dateAdded: day
     });
 
     // Searches if the name of the database is at the home, then saves it

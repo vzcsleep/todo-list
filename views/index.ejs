@@ -21,8 +21,15 @@
             <% itemList.forEach(function(item) { %>
                 <form action="/delete" method="post">
                     <div class="item">
-                        <input type="checkbox" name="checkbox" value="<%=item._id%>" onchange="this.form.submit()">
-                        <p>- <%= item.text %></p>
+                        <div class="delete">
+                            <input type="checkbox" name="checkbox" value="<%=item._id%>" onchange="this.form.submit()">                  
+                        </div>
+                        <div class="heading">
+                            <p class="small">· <%=item.dateAdded%></p>
+                        </div>
+                        <div class="message">
+                            <p class="big">· <%= item.text %></p>
+                        </div>
                     </div>
                     <input type="hidden" name="listName" value="<%=listTitle%>">
                 </form>

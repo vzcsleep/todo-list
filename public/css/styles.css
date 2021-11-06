@@ -27,7 +27,22 @@ h3 {
 }
 
 p {
+    font-weight: 500;
+    display: block;
     color: #EEEEEE;
+    line-height: 30px;
+    word-break: break-all;
+    white-space: normal;
+}
+
+.big {
+    font-size: 20px;
+    margin: 0;
+}
+
+.small {
+    font-size: 16px;
+    margin: 0;
 }
 
 .box {
@@ -47,7 +62,7 @@ button {
 input {
     border: none;
     border-bottom: 2px solid #548CA8;
-    background: #476072;
+    background: transparent;
     outline: none;
     color: #EEEEEE;
     font-size: 16px;
@@ -58,25 +73,32 @@ input:checked+p {
 }
 
 .item {
-    display: flex;
+    display: grid;
+    grid-template-areas: 
+    "delete heading"
+    "delete message"; 
+    grid-template-rows: 50px 50px;
+    grid-template-columns: 1fr 8fr;
+    margin: auto 0;
+    text-align: left;
+
     align-items: center;
     background-color: #548CA8;
     border-radius: 20px;
     margin-bottom: 5px;
 }
 
-.firstItem {
-    display: flex;
-    align-items: center;
-    background-color: #548CA8;
-    border-radius: 15px 15px 0 0;
+.delete {
+    grid-area: delete;
+    text-align: center;
 }
 
-.item:last-child {
-    display: flex;
-    align-items: center;
-    background-color: #548CA8;
-    border-radius: 0 0 15px 15px;
+.heading {
+    grid-area: heading;
+}
+
+.message {
+    grid-area: message;
 }
 
 img {
